@@ -11,8 +11,9 @@ const Campground = require('./models/campground');
 const Review = require('./models/review');
 
 // Connecting to MongoDB:
+// mongoose.connect('mongodb://0.0.0.0:27017/yelp-camp', {
+// mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp', {
-    // mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
     // useCreateIndex: true,
     useUnifiedTopology: true
@@ -46,7 +47,6 @@ const validateCampground = (req, res, next) => {
         next();
     }
 }
-
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
     if (error) {
@@ -70,7 +70,6 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 })
 
-
 app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
     const campground = new Campground(req.body.campground);
@@ -79,7 +78,7 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
 }))
 
 app.get('/campgrounds/:id', catchAsync(async (req, res,) => {
-    const campground = await Campground.findById(req.params.id)
+    const campground = await Campground.findById(req.params.id).populate('reviews');
     res.render('campgrounds/show', { campground });
 }));
 
