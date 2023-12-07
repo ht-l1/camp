@@ -1,4 +1,4 @@
-const { storeReturnTo } = require('../middleware');
+// const { storeReturnTo } = require('../middleware');
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -36,7 +36,7 @@ router.get('/login', (req, res) => {
 //     res.redirect(redirectUrl);
 // })
 
-router.post('/login', storeReturnTo, passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),
+router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),
     (req, res) => {
         req.flash('success', 'Welcome back!');
         const redirectUrl = res.locals.returnTo || '/campgrounds';
